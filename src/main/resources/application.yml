@@ -1,0 +1,34 @@
+spring:
+  application:
+    name: lean
+
+  # Conexion a la Base de Datos Docker
+  datasource:
+    url: jdbc:postgresql://localhost:5432/lean_memory
+    username: postgres
+    password: root
+    driver-class-name: org.postgresql.Driver
+
+  jpa:
+    hibernate:
+      ddl-auto: update # Crea las tablas si no existen
+    show-sql: false
+
+  # Configuracion de Inteligencia Artificial (Spring AI)
+  ai:
+    ollama:
+      base-url: http://localhost:11434
+      chat:
+        options:
+          model: qwen2.5:7b # El modelo que pensara y ejecutara comandos
+          temperature: 0.1  # Baja temperatura para que sea tecnico y preciso
+      embedding:
+        options:
+          model: nomic-embed-text # El minimodelo para convertir recuerdos a matematicas
+
+    vectorstore:
+      pgvector:
+        index-type: HNSW
+        distance-type: COSINE_DISTANCE
+        dimensions: 768 # Las dimensiones que usa nomic-embed-text
+        initialize-schema: true # Crea las tablas vectoriales automaticamente
