@@ -4,6 +4,7 @@ services:
   postgres-vector:
     image: pgvector/pgvector:pg16
     container_name: lean-db
+#    SUSTITUIR POR CREDENCIALES PROPIAS
     environment:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=root
