@@ -38,13 +38,15 @@ public class IntentProcessorService implements ProcessUserIntentUseCase {
             SystemCommand command = possibleCommand.get();
             log.info("Lean ha decidido ejecutar la acción: {}", command.action());
 
-            // 3.1 Ejecutar el comando en el sistema host
-            ExecutionResult actionResult = systemOperator.execute(command);
+            if (command.action() == CommandAction.JUST_TALK) {
+                log.info("Intención puramente conversacional. Saltando la capa del SO.");
+                String conversationalResponse = llmProvider.generateResponse(context, null);
+                return ExecutionResult.success(conversationalResponse, "No execution needed");
+            }
 
-            // 3.2 Generar una respuesta natural ("Ya creé la carpeta, señor")
+            ExecutionResult actionResult = systemOperator.execute(command);
             String naturalResponse = llmProvider.generateResponse(context, actionResult);
 
-            // 3.3 Devolver el resultado empaquetado
             return new ExecutionResult(actionResult.isSuccessful(), naturalResponse, actionResult.rawOutput());
         }
 
@@ -55,10 +57,7 @@ public class IntentProcessorService implements ProcessUserIntentUseCase {
         return ExecutionResult.success(conversationalResponse, "No execution needed");
     }
 
-    /**
-     * Método auxiliar privado para ensamblar todo el contexto que la IA necesita
-     * antes de procesar el mensaje.
-     */
+  //Crea el contexto para la ia antes de generar el mensaje
     private LeanContext buildContext(String userMessage) {
         PersonalityProfile profile = personalityRepository.getActiveProfile();
 
