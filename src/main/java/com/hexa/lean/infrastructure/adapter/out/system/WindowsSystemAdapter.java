@@ -33,6 +33,9 @@ public class WindowsSystemAdapter implements SystemOperatorPort {
                     String path = command.parameters().get("path");
                     builder.command("powershell.exe", "-Command", "New-Item -ItemType Directory -Force -Path '" + path + "'");
                 }
+                case READ_RAM_USAGE -> {
+                    return ExecutionResult.success("Métricas obtenidas", readSystemMetrics());
+                }
                 default -> throw new UnsupportedOperationException("Acción no soportada en Windows");
             }
 
