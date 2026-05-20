@@ -5,5 +5,5 @@ public enum CommandAction {
     CREATE_DIRECTORY,
     READ_RAM_USAGE,
     JUST_TALK,
-    LIST_PROCESSES
+    SAVE_MEMORY
 }
